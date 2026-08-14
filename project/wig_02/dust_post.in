@@ -1,0 +1,18 @@
+basename =     Postprocess/wig_01
+data_basename = Output/wig_01
+
+analysis = {
+  name = vl
+  type = Viz
+
+  format = vtk !tecplot
+
+  start_res = 1
+  end_res = 1000
+  step_res = 1
+  wake = T
+  separate_wake = T
+  variable = Velocity
+  variable = Vorticity
+  variable = Pressure
+}

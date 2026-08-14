@@ -1,0 +1,44 @@
+basename = ./Output/wig_01
+
+tstart  = 0.0 
+tend    = 10.0
+dt      = 0.01
+dt_out  = 0.01
+
+geometry_file = geo_input.h5
+reference_file = References.in
+
+! Reference values ---------------------
+rho_inf = 1.2250000 
+u_inf = (/30., 0., 0./)
+
+! Model parameters -------------------
+particles_box_min = (/  -9, -16, -4 /)
+particles_box_max = (/  23,  16,  4/)
+fmm = T
+
+! octree parameters--------------------
+box_length = 8
+n_box = (/4, 4 , 1/)
+octree_origin = (/-9 , -16 , -4/)
+n_octree_levels = 6
+min_octree_part = 5
+multipole_degree = 2
+vortstretch = T
+diffusion = T
+
+! wake parameters  -------------
+n_wake_panels = 3
+n_wake_particles = 200000
+! wake regularisation
+divergence_filtering = T
+filter_time_scale = 40
+rankine_rad=0.03  
+vortex_rad = 0.05 
+cutoff_rad = 0.001
+
+! lifting lines solver-----------------
+ll_tol = 1.0e-6
+ll_damp = 20
+ll_reynolds_corrections = F
+ll_max_iter = 400

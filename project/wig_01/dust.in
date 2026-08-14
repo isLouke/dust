@@ -2,8 +2,8 @@ basename = ./Output/wig_01
 
 tstart  = 0.0 
 tend    = 10.0
-dt      = 0.1
-dt_out  = 0.1
+dt      = 0.01
+dt_out  = 0.01
 
 geometry_file = geo_input.h5
 reference_file = References.in

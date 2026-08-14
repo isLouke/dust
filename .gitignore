@@ -20,6 +20,7 @@ src/general/mod_version.f90
 *.rfm
 build/
 *.h5
+*.vtu
 !test/
 .vscode
 *.aux
