@@ -10,4 +10,8 @@ comp_name = vertical
 geo_file = vertical.in
 ref_tag = VerticalRef
 
+comp_name = sea
+geo_file = sea.in
+ref_tag = SeaRef
+
 file_name = geo_input.h5 

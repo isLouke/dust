@@ -1,5 +1,5 @@
-basename =     Postprocess/wig_01
-data_basename = Output/wig_01
+basename =     Postprocess/wig_03
+data_basename = Output/wig_03
 
 analysis = {
   name = vl
