@@ -2,8 +2,8 @@ basename = ./Output/wig_04
 
 tstart  = 0.0 
 tend    = 30.0
-dt      = 0.1
-dt_out  = 0.1
+dt      = 0.01
+dt_out  = 0.01
 
 geometry_file = geo_input.h5
 reference_file = References.in
@@ -33,7 +33,7 @@ diffusion = T
 
 ! wake parameters  -------------
 n_wake_panels = 3
-n_wake_particles = 1000000
+n_wake_particles = 2000000
 ! wake regularisation
 divergence_filtering = T
 filter_time_scale = 40
