@@ -1,0 +1,31 @@
+mesh_file_type = parametric
+el_type = p
+
+scaling_factor = 1.0
+offset = (/0.0, 0.0, 0.0/)
+
+airfoil_table_correction = T
+
+mesh_symmetry = T
+symmetry_point = (/0.0, 0.0, 0.0/)
+symmetry_normal = (/0.0, 1.0, 0.0/)
+
+nelem_chord = 20
+type_chord = cosineLE
+
+! First section - Root
+chord = 6.0           !chord length
+twist = 0.0           !chord twist (deg)
+airfoil = ./airfoils/mh70.dat   
+
+! First region - Root > Tip
+span  = 4.0             !span of the region
+sweep = 0.0             ! sweep angle (deg)
+dihed = -11.0           ! dihedral angle (deg)
+nelem_span = 20         !number of elements in span region 
+type_span = uniform     !distribution of elements in span
+
+! Second section - Tip
+chord = 0.2
+twist = 0.0
+airfoil = ./airfoils/mh70.dat
