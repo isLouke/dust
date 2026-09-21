@@ -1,0 +1,57 @@
+reference_tag = WigRef
+parent_tag = 0
+origin = (/0.0,0.0,0.0/)
+orientation = (/1.0,0.0,0.0, 0.0,1.0,0.0, 0.0,0.0,1.0/)
+multiple = F
+moving = T
+motion = {
+    pole = {
+        input = position
+        input_type = simple_function
+        function = (/1, 1, 1/)
+        amplitude = 1.0
+        vector = (/0.0, 0.0, 1.0/)
+        omega  = (/3.0, 3.0, 3.0/)
+        phase  = (/0.0, 0.0, 0.0/)
+        offset = (/0.0, 0.0, 0.0/)
+    }
+    rotation ={
+        input = position
+        input_type = simple_function
+        function = 1
+        Axis = (/0.0, 1.0, 0.0/)
+        amplitude = 0.1
+        omega = 3.0
+        phase = 0.0
+        offset = 0.0
+        psi_0 = 0.0
+    }
+}
+
+reference_tag = WingRef
+parent_tag = WigRef
+origin = (/0.0, 0.0, 0.0/)
+orientation = (/1.0,0.0,0.0, 0.0,1.0,0.0, 0.0,0.0,1.0/)
+multiple = F
+moving = F
+
+reference_tag = HorizontalRef
+parent_tag = WigRef
+origin = (/6.5, 0.0, 2.0/)
+orientation = (/1.0,0.0,0.0, 0.0,1.0,0.0, 0.0,0.0,1.0/)
+multiple = F
+moving = F
+
+reference_tag = VerticalRef
+parent_tag = WigRef
+origin = (/6.5, 0.0, 0.8/)
+orientation = (/1.0,0.0,0.0, 0.0,0.0,1.0, 0.0,-1.0,0.0/)
+multiple = F
+moving = F
+
+reference_tag = SeaRef
+parent_tag = 0
+origin = (/0.0, 0.0, 0.0/)
+orientation = (/1.0,0.0,0.0, 0.0,1.0,0.0, 0.0,0.0,1.0/)
+multiple = F
+moving = F

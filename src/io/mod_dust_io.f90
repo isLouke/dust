@@ -343,7 +343,7 @@ subroutine save_status(geo, wake,  it, time, run_id)
     end do
     call close_hdf5_group(gloc3)
 
-    if(sim_param%output_detailed_geo) then
+    if(sim_param%output_detailed_geo .or. geo%components(icomp)%is_sea) then
       call new_hdf5_group(gloc2, 'Geometry', gloc3)
       call write_hdf5(geo%points(:,geo%components(icomp)%i_points), &
                       'rr',gloc3)

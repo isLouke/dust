@@ -1,0 +1,7 @@
+mesh_file_type = sea
+el_type = p
+
+start_point = (/-10.0, -30.0, 0.0/)
+end_point   = (/ 50.0,  30.0, 0.0/)
+nelem_x = 80
+nelem_y = 80

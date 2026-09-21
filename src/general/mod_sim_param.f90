@@ -304,6 +304,9 @@ type t_sim_param
   integer   :: kutta_startstep
   integer   :: kutta_update_jacobian
 
+  !> Sea free-surface parameters
+  real(wp)  :: sea_relax = 0.0_wp
+
   !> PreCICE
 #if USE_PRECICE
   character(len=max_char_len) :: precice_config
@@ -451,7 +454,10 @@ subroutine create_param_main(prms)
   call prms%CreateIntOption('kutta_maxiter', 'maximum number of iterations for kutta condition', '100')
   call prms%CreateIntOption('kutta_start_step', 'step in which the kutta condition starts', '1') 
   call prms%CreateIntOption('kutta_update_jacobian', 'step frequency where the Jacobian is updated', '1')   
-  
+
+  !> Sea free-surface parameters
+  call prms%CreateRealOption('sea_relax', 'Restoring coefficient of the sea free surface (1/time)', '1.0')
+
   !> Octree and multipole data 
   call prms%CreateLogicalOption('fmm','Employ fast multipole method?','T')
   call prms%CreateLogicalOption('fmm_panels','Employ fast multipole method &
@@ -800,6 +806,10 @@ subroutine init_sim_param(sim_param, prms, nout, output_start)
   sim_param%kutta_maxiter                 = getint(prms, 'kutta_maxiter')
   sim_param%kutta_startstep               = getint(prms, 'kutta_start_step') 
   sim_param%kutta_update_jacobian         = getint(prms,'kutta_update_jacobian')
+
+  !> Sea free-surface parameters
+  sim_param%sea_relax                      = getreal(prms, 'sea_relax')
+
   !> Octree and FMM parameters
   sim_param%use_fmm                       = getlogical(prms, 'fmm')
 

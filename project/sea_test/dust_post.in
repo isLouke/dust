@@ -1,0 +1,77 @@
+basename = ./Postprocess/sea_test
+data_basename = ./Output/sea_test
+
+analysis = {
+  name = vl
+  type = Viz
+
+  format = vtk !tecplot
+
+  start_res = 1
+  end_res = 1000
+  step_res = 1
+  wake = T
+  separate_wake = T
+  variable = Velocity
+  variable = Vorticity
+  variable = Pressure
+}
+
+analysis = {
+
+type = integral_loads
+name = loads_full
+start_res = 1
+end_res   = 1000
+step_res  = 1
+format   = dat
+
+average = T
+component = wing  
+component = horizontal
+component = vertical  
+reference_tag = 0
+
+}
+
+analysis = {
+
+type = integral_loads
+name = loads_left
+start_res = 1 
+end_res   = 1000
+step_res  = 1
+format   = dat
+
+component = wing  
+reference_tag = 0
+
+}
+
+analysis = {
+
+type = integral_loads
+name = loads_left
+start_res = 1 
+end_res   = 1000
+step_res  = 1
+format   = dat
+
+component = vertical  
+reference_tag = 0
+
+}
+
+analysis = {
+
+type = integral_loads
+name = loads_left
+start_res = 1 
+end_res   = 1000
+step_res  = 1
+format   = dat
+
+component = horizontal  
+reference_tag = 0
+
+}

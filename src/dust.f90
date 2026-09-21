@@ -124,6 +124,9 @@ use mod_wake, only: &
   t_wake, initialize_wake, update_wake, &
   prepare_wake, load_wake, complete_wake, destroy_wake
 
+use mod_sea, only: &
+  initialize_sea, update_sea, destroy_sea
+
 use mod_vtk_out, only: &
   vtk_out_bin
 
@@ -368,6 +371,9 @@ if(sim_param%debug_level .ge. 15) &
   call debug_printout_geometry_minimal(elems, geo, basename_debug, 0)
 if(sim_param%debug_level .ge. 15) &
   call debug_ll_printout_geometry(elems_ll, geo, basename_debug, 0)
+
+!> Initialize the sea free surface (store rest heights, if any sea component)
+call initialize_sea(geo)
 
 !> TODO: check whether to move these calls before, and precisely what they do
 if(sim_param%debug_level .ge. 7) call ignoredParameters(prms)
@@ -1466,6 +1472,8 @@ end if
       if ( mod( it, sim_param%ndt_update_wake ) .eq. 0 ) then
         call complete_wake(wake, geo, elems_tot, te, it)
       end if
+      !> Relax the sea free surface
+      call update_sea(geo, elems_tot, wake)
     endif
     t1 = dust_time() 
 
@@ -1538,6 +1546,7 @@ deallocate(res_old)
 
 !> Cleanup 
 call destroy_wake(wake)
+call destroy_sea(geo)
 call destroy_octree(octree)
 call destroy_linsys(linsys)
 call destroy_elements(geo)

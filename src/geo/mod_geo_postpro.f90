@@ -306,6 +306,9 @@ subroutine load_components_postpro(comps, points, nelem, floc, &
       comps(i_comp)%comp_name = trim(comp_name)
       comps(i_comp)%comp_input = trim(comp_input)
 
+      !> A "sea" component is identified by its input type
+      comps(i_comp)%is_sea = ( trim(comp_input) .eq. 'sea' )
+
       call read_hdf5(comp_coupling_str,'Coupled',cloc)
       if ( trim(comp_coupling_str) .eq. 'true' ) then
         comps(i_comp)%coupling = .true.
@@ -653,6 +656,8 @@ subroutine update_points_postpro(comps, points, refs_R, refs_off, &
 #if USE_PRECICE
   real(wp), allocatable                  :: rr(:,:)
   real(wp), allocatable                  :: ori(:,:)
+#else
+  real(wp), allocatable                  :: rr(:,:)
 #endif
   character(len=*), optional, intent(in) :: filen
   character(max_char_len)                :: cname
@@ -668,15 +673,16 @@ subroutine update_points_postpro(comps, points, refs_R, refs_off, &
   do i_comp = 1,size(comps)
     associate(comp => comps(i_comp))
 #if USE_PRECICE
-  if ( .not. comp%coupling ) then
+  if ( .not. comp%coupling .and. .not. comp%is_sea ) then
+#else
+  if ( .not. comp%is_sea ) then
 #endif
     !> Move points of a rigid component, not coupled with an external software
     points(:,comp%i_points) = move_points(comp%loc_points, &
                               refs_R(:,:,comp%ref_id), &
                               refs_off(:,comp%ref_id))
-#if USE_PRECICE
   else
-    !> Read points of a coupled component, from result files
+    !> Read points of a coupled (or sea) component, from result files
 
     !> Open result hdf5 file and read points coordinates
     call open_hdf5_file( trim(filen), floc )
@@ -685,19 +691,21 @@ subroutine update_points_postpro(comps, points, refs_R, refs_off, &
     call open_hdf5_group( gloc, trim(cname), cloc )
     call open_hdf5_group( cloc, 'Geometry', rloc )
     call read_hdf5_al(rr,  'rr', rloc)
-    call read_hdf5_al(ori, 'ori', rloc)
-    
+#if USE_PRECICE
+    if ( comp%coupling ) then
+      call read_hdf5_al(ori, 'ori', rloc)
+      do ie = 1, size(comp%el)
+        comp%el(ie)%ori = ori(ie,:)
+      end do
+    end if
+#endif
     points(:,comp%i_points) = rr
-    do ie = 1, size(comp%el)
-      comp%el(ie)%ori = ori(ie,:)
-    enddo 
     !> Quite dirty: open and close for each component
     call close_hdf5_group(rloc)
     call close_hdf5_group(cloc)
     call close_hdf5_group(gloc)
     call close_hdf5_file(floc)
   endif
-#endif
 
 
   !> Hinges 

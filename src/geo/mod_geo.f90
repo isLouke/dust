@@ -264,6 +264,11 @@ type :: t_geo_component
   !> Dimensions of parametric elements only
   integer :: parametric_nelems_span , parametric_nelems_chor
 
+  !> Is the component a free-surface "sea" mesh?
+  logical :: is_sea = .false.
+  !> Rest (undisturbed) height of each sea point, in the global reference frame
+  real(wp), allocatable :: sea_z0(:)
+
 end type  t_geo_component
 
 !-----------------------------------
@@ -1089,6 +1094,9 @@ subroutine load_components(geo, in_file, out_file, te)
       ! ====== READING =====
       geo%components(i_comp)%comp_el_type = trim(comp_el_type)
       geo%components(i_comp)%comp_input   = trim(comp_input  )
+
+      !> A "sea" component is identified by its input type
+      geo%components(i_comp)%is_sea = ( trim(comp_input) .eq. 'sea' )
 
       if(mult) then
         write(geo%components(i_comp)%comp_name,'(A,I2.2)') trim(comp_name)&

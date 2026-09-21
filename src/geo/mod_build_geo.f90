@@ -217,6 +217,10 @@ subroutine build_component(gloc, geo_file, ref_tag, comp_tag, comp_id, &
   real(wp)         :: offset(3)
   real(wp)         :: scaling
   integer          :: npoints_chord_tot, nelems_span, nelems_span_tot
+
+  !> Sea (flat free-surface) mesh parameters
+  real(wp)         :: start_point(3), end_point(3)
+  integer          :: nelem_x, nelem_y
   
   !> Connectivity and te structures
   integer , allocatable                    :: neigh(:,:)
@@ -236,7 +240,7 @@ subroutine build_component(gloc, geo_file, ref_tag, comp_tag, comp_id, &
   integer , allocatable       :: e_te(:,:), i_te(:,:), ii_te(:,:)
   integer , allocatable       :: neigh_te(:,:), o_te(:,:)
   real(wp), allocatable       :: rr_te(:,:), t_te(:,:)
-  integer                     :: n_e_te_panel
+  integer                     :: n_e_te_panel = 0
 
   integer :: i
 
@@ -364,6 +368,18 @@ subroutine build_component(gloc, geo_file, ref_tag, comp_tag, comp_id, &
               'Number of elements along the length of the body revolution.')
   call geo_prs%CreateIntOption('rev_nelem_rev', &
           'Number of elements around the body of revolution circumference.')
+
+  !> Sea (flat free-surface) mesh
+  call geo_prs%CreateRealArrayOption('start_point', &
+              'First corner of the sea plane (x, y, z)', &
+              '(/0.0, 0.0, 0.0/)')
+  call geo_prs%CreateRealArrayOption('end_point', &
+              'Opposite corner of the sea plane (x, y, z)', &
+              '(/1.0, 1.0, 0.0/)')
+  call geo_prs%CreateIntOption('nelem_x', &
+              'Number of sea elements along x', '10')
+  call geo_prs%CreateIntOption('nelem_y', &
+              'Number of sea elements along y', '10')
 
   !=====
   !===== Read the parameters ====
@@ -642,6 +658,23 @@ subroutine build_component(gloc, geo_file, ref_tag, comp_tag, comp_id, &
     call meshbyrev (rr_te(:,1),rr_te(:,2), nSections, rr, ee)
 
     deallocate (rr_te)
+
+  case('sea')
+
+    start_point = getrealarray(geo_prs, 'start_point', 3)
+    end_point   = getrealarray(geo_prs, 'end_point',   3)
+    nelem_x     = getint(geo_prs, 'nelem_x')
+    nelem_y     = getint(geo_prs, 'nelem_y')
+
+    if ( nelem_x .lt. 1 .or. nelem_y .lt. 1 ) then
+      call error(this_sub_name, this_mod_name, &
+        'Input nelem_x and nelem_y for a sea component must be positive.')
+    endif
+
+    !> A sea is an open free surface: never build a trailing edge/wake
+    suppress_te = .true.
+
+    call build_flat_rectangle(start_point, end_point, nelem_x, nelem_y, ee, rr)
 
   case('parametric')
 
@@ -1004,7 +1037,7 @@ subroutine build_component(gloc, geo_file, ref_tag, comp_tag, comp_id, &
   !===== * stripe connectivity
   !=====
   selectcase(trim(mesh_file_type))
-    case( 'basic', 'revolution' )
+    case( 'basic', 'revolution', 'sea' )
 
       call build_connectivity_general( ee , neigh )
 
@@ -2610,4 +2643,55 @@ subroutine meshbyrev ( x, y, nphi, rr, ee )
 
 end subroutine meshbyrev
 
+!----------------------------------------------------------------------
+
+!> Build a flat rectangular mesh in a plane (used for the sea free surface)
+!!
+!! The mesh is a structured grid of quadrilateral elements, spanning from
+!! <start_point> to <end_point>. The two points define opposite corners of the
+!! rectangle and are assumed to lie on the same plane (typically z = const).
+!!
+!! Node ordering (column major, consistent with build_connectivity_general):
+!!   p(i,j) = i*(ny+1) + j + 1 ,  i = 0..nx , j = 0..ny
+!! Element (i,j) corners: (i,j), (i+1,j), (i+1,j+1), (i,j+1)
+subroutine build_flat_rectangle(start_point, end_point, nx, ny, ee, rr)
+  real(wp), intent(in)              :: start_point(3)
+  real(wp), intent(in)              :: end_point(3)
+  integer,  intent(in)              :: nx, ny
+  integer,  allocatable, intent(out):: ee(:,:)
+  real(wp), allocatable, intent(out):: rr(:,:)
+
+  integer :: i, j, ie, np, nx1, ny1
+
+  nx1 = nx + 1
+  ny1 = ny + 1
+  np  = nx1 * ny1
+
+  allocate(rr(3, np))
+  allocate(ee(4, nx*ny))
+
+  !> Points
+  do j = 0, ny
+    do i = 0, nx
+      rr(1, i*ny1 + j + 1) = start_point(1) + real(i,wp)/real(nx,wp)*(end_point(1) - start_point(1))
+      rr(2, i*ny1 + j + 1) = start_point(2) + real(j,wp)/real(ny,wp)*(end_point(2) - start_point(2))
+      rr(3, i*ny1 + j + 1) = start_point(3) + real(j,wp)/real(ny,wp)*(end_point(3) - start_point(3))
+    end do
+  end do
+
+  !> Elements
+  ie = 0
+  do j = 0, ny-1
+    do i = 0, nx-1
+      ie = ie + 1
+      ee(1, ie) = i*ny1      + j + 1
+      ee(2, ie) = (i+1)*ny1  + j + 1
+      ee(3, ie) = (i+1)*ny1  + j + 2
+      ee(4, ie) = i*ny1      + j + 2
+    end do
+  end do
+
+end subroutine build_flat_rectangle
+
 end module mod_build_geo
+
