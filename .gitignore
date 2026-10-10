@@ -38,3 +38,5 @@ CMakeFiles/
 *.nc
 *.out 
 __pycache__
+
+build/
