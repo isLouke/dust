@@ -40,3 +40,4 @@ CMakeFiles/
 __pycache__
 
 build/
+venv/
