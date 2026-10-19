@@ -1,0 +1,122 @@
+! --- Execution Parameters ---
+basename        = ./Output/naca0012_wing        ! The base name of the simulation and will be the prefix of the output files.
+basename_debug  = ./Output/Debug/naca0012_wing  ! The base name of the debug output.
+debug_level     = 3                             ! A parameter controlling the verbosity.
+
+! --- Time Parameters ---
+tstart          = 0.0       ! The start time of the simulation.
+tend            = 3.0       ! The end time of the simulation.
+! timesteps       = 20        ! The number of timesteps for the simulation. Required if dt not set, forbidden if set.
+dt              = 0.001      ! Required if timesteps not set, forbidden if set.
+dt_out          = 0.1       ! Time interval of solution output.
+dt_debug_out    = 1.0       ! Time interval of debug output.
+! output_start    = F         ! Output the first iteration.
+! output_detailed_geo = T     ! Output additional geometry information in the result files.
+
+! --- Restart Parameters ---
+! restart_from_file   = T                     ! Restart the simulation from a previous result.
+! restart_file        = ./Output/naca0012_wing_res_0046.h5 ! Name of the solution file from which to restart the simulation.
+! reset_time          = F                     ! If set to true, when restarting from a previous result, the time will be set as the tstart from the input file.
+
+! --- Input Files ---
+reference_file = References.in
+geometry_file = ./Geometry/geo_input.h5
+
+! --- Stream Parameters ---
+u_inf   = (/14.37, 0.00, 3.06/)   ! Free stream velocity vector. Re = rho*U*c/mu => 1e06 = 1.225*U*0.6096/0.000018 => U = 24.10 m/s , matches airfoils/naca0012.c81
+! u_ref   = 1.0                   ! Reference velocity.
+! gust    = F                     ! Read manual for more settings.
+! P_inf   = 101325.0              ! Free stream pressure.
+! a_inf   = 340.0                 ! Free stream sound speed. For lifting lines and compressibility corrections.
+! mu_inf  = 0.000018              ! Free stream dynamical viscosity. For lifting lines and viscosity corrections
+! rho_inf = 1.225                 ! Free stream density.
+
+! --- Wake Parameters ---
+n_wake_panels           = 3                         ! Number of panel wake rows before converting the wake to vortex particles.
+n_wake_particles        = 350000                    ! Number of maximum vortex particles in the wake.
+ndt_update_wake         = 1                         ! Number of time step between two wake updates.
+particles_box_min       = (/-10.0, -10.0, -10.0/)   ! Minimum coordinates of the box containing the vortex particles.
+particles_box_max       = (/100.0, 10.0, 10.0/)     ! Maximum coordinates of the box containing the vortex particles.
+implicit_panel_scale    = 0.3                       ! Scaling of the first panel of the wake, the implicit one which enforces the Kutta condition.
+implicit_panel_min_vel  = 1.0e-8                    ! When the trailing edge local velocity is below implicit_panel_min_vel a fixed length of the panel is imposed
+
+rigid_wake              = F                         ! Impose a wake which is evolved rigidly
+rigid_wake_vel          = (/1.0, 0.0, 0.0/)         ! Velocity to impose to the rigid wake.
+join_te                 = F                         ! Employ trailing edge joining for close trailing edges.
+join_te_factor          = 1.0                       ! Trailing edges which are closer than join_te_factor times the length of the adjacent trailing edge elements will be joined
+autoscale_te            = F                         ! Autoscale the first te panel.
+refine_wake             = F                         ! Allow splitting the wake panel into sub-particles.
+k_refine                = 1                         ! Number of subdivision of the shortest panel edge if refine_wake is T.
+
+! --- Model Parameters ---
+far_field_ratio_doublet = 10.0                      ! Ratio with respect to element length to set the thresholds for far field approximation.
+far_field_ratio_source  = 10.0                      ! Ratio with respect to element length to set the thresholds for far field approximation.
+doublet_threshold       = 1.0e-6                    ! Parameter which sets the distance threshold under which the evaluation point, with respect to a panel, is considered inside the plane of the panel.
+rankine_rad             = 0.1                       ! Parameter which sets the radius under which the Rankine approximation of vortexes cores is employed.
+! vortex_rad              = 0.1                       ! Parameter which uniformly sets the radius of the vortex particles, only used if k_vortex_rad is disabled.
+k_vortex_rad            = 1.0                       ! Coefficient for the automatic computation of the radius of each vortex particle; set a negative number to disable the feature and revert to uniform vortex radius.
+cutoff_rad              = 0.001                     ! Parameter which sets the radius under which the vortexes interaction is completely set to zero.
+vortstretch             = T                         ! Calculate the evolution of vorticity of the particles considering the vortex stretching
+vortstretch_from_elems  = F                         ! Compute also the contribution to the vortex stretching of the particles due to the model elements.
+diffusion               = T                         ! Calculate the evolution of vorticity of the particles considering the vorticity diffusion
+turbulent_viscosity     = F                         ! Introduce additional turbulent viscosity (Smagorinsky style) to the vorticity diffusion term. Working only when fmm is turned on.
+! penetration_avoidance   = F                         ! Apply the penetration avoidance algorithm to avoid the penetration of particles inside the solid bodies.
+! penetration_avoidance_check_radius      = 5.0       ! Radius multiplication factor of the check radius.
+! penetration_avoidance_element_radius    = 1.5       ! Surface correction element radius multiplication factor.
+divergence_filtering    = T                         ! Employ the divergence filtering to keep the vorticity field divergence-free.
+filter_time_scale       = 40.0                      ! Timescale of the time filter to filter the divergence.
+fmm                     = T                         ! Use the fast multipole method for particles evolution.
+fmm_panels              = F                         ! Use the fast multipole method also to compute interactions of the particles on the solid bodies panels. EXPERIMENTAL
+viscosity_effects       = F                         ! Take into account viscosity effects on the geometry surface: enables the release of vortex particles from different points on the geometry surface. EXPERIMENTAL
+! particles_redistribution = F                        ! Redistribute the particles having a small intensity to the neighboring ones.
+! particles_redistribution_ratio = 3.0                ! When employing particles_redistribution, each particle of intensity |αi | will be redistributed to the other particles contained in the octree leaf cell
+! octree_level_solid      = 4                         ! When employing particles_redistribution, the particles too near to a solid boundary are not redistributed to reduce the error induced by the redistribution on the solution on solid surfaces.
+! HCAS                    = F                         ! Hover Convergence Augmentation System.
+! HCAS_time               = 4.0                       ! Duration of HCAS application
+! HCAS_velocity           = (/2.0, 0.0, 0.0/)         ! Velocity to apply to the particles during the HCAS use.
+
+! --- Fast Multipole Parameters ---
+box_length              = 10.0                      ! Length of the level 1 cubic boxes composing the octree.
+n_box                   = (/11, 2, 2/)               ! Number of base level 1 cubic boxes in each spatial direction.
+octree_origin           = (/-10.0, -10.0, -10.0/)   ! Origin of the octree.
+n_octree_levels         = 6                         ! Number of levels in which the base boxes are divided.
+min_octree_part         = 10                        ! Minimum number of particles contained in an octree box in order to consider it a leaf (lowest level box).
+multipole_degree        = 2                         ! Degree of the expansions in the multipole method.
+dynamic_layers          = F                         ! Use dynamic octree layers, i.e. a further division layer in the octree is added every time the time spent in the particle to particle calculations is greater than the one spent in the fast multipole part.
+nmax_octree_levels      = 7                         ! Maximum number of divisions allowed during dynamic layers.
+leaves_time_ratio       = 3.0                       ! Ratio between the time spent in the particle to particle computations in the leaves of the octree with respect to the rest of the fast multipole computations that triggers the increase of the octree levels.
+
+! --- Lifting Lines parameters ---
+! ll_solver                               = GammaMethod ! Choose the type of lifting line solver to be employed. Option: GammaMethod, AlphaMethod
+! ll_reynolds_corrections                 = F         ! Employ a Reynolds number correction.
+! ll_reynolds_corrections_nfact           = 0.2       ! The Reynolds correction extrapolation is based on a power law. The parameter provides the value of the power law.
+! ll_max_iter                             = 100       ! Number of iterations of the fixed point non-linear solver used to obtain the lifting lines solution.
+! ll_tol                                  = 1.0e-6    ! Relative tolerance at which the fixed point lifting lines solver stops
+! ll_damp                                 = 25.0      ! Value of the damping (relaxation) coefficient employed during fixed point iterations, to suppress possible oscillations.
+! ll_stall_regularisation                 = T         ! During the first timesteps of simulations employing lifting lines, usually in challenging configurations such as hovering rotors
+! ll_stall_regularisation_nelems          = 1         ! Number of lifting line elements to correct in case of isolated stall among non stalled elements.
+! ll_stall_regularizations_niters         = 1         ! Number of LL iterations between two regularization processes.
+! ll_stall_regularization_alpha_stall     = 15        ! Stall angle [deg] used as a threshold for regularization process.
+! ll_loads_avl                            = F         ! Use AVL expression for the inviscid load contributions of LL elements, in the same way of load computation used for VL elements.
+! ll_artificial_viscosity                 = 0.0       ! Artificial viscosity used to spatially regularize the solution with a gaussian kernel.
+! ll_artificial_viscosity_adaptive        = F         ! Use an adaptive strategy to introduce artificial viscosity for regularization, in order to regularize post stall configuration while not influencing non stalled configurations.
+! ll_artificial_viscosity_adaptive_alpha  = 15        ! Angle of attack after which the full artificial viscosity is introduced, thus after which the maximum regularization is operated. Should be set around or over the stall angle
+! ll_artificial_viscosity_adaptive_dalpha = 3         ! Angle of attack range before ll_artificial_viscosity_adaptive_alpha where the artificial viscosity is gradually introduced from zero to the maximum value set in ll_artificial_viscosity.
+
+! --- Vortex Lattice Correction ---
+vl_tol                  = 1.0e-4                    ! Tolerance for the absolute error on lift coefficient in fixed point iteration for corrected vortex lattice.
+vl_relax                = 0.3                       ! Constant relaxation factor for rhs update.
+aitken_relaxation       = T                         ! Activate the Aitken acceleration and stabilization method involved during the vortex lattice fixed point iteration.
+vl_maxiter              = 100                       ! Max number of iteration for correction of vortex lattice
+vl_start_step           = 0                         ! Time step to start correcting the vortex lattice element
+vl_dynstall             = F                         ! Activate Boeing1 dynamic stall on the corrected v element. EXPERIMENTAL
+vl_average              = F                         ! Average the solution between the iteration: this may further stabilize the solution in stalled conditions
+vl_average_iter         = 10                        ! Number of iteration on which the average is computed.
+
+! --- Kutta Condition Correction ---
+kutta_correction        = F                         ! Employ kutta condition for surface panel with trailing edge.
+kutta_beta              = 0.01                      ! Perturbation factor for kutta condition to compute jacobian matrix
+kutta_tol               = 1.0e-6                    ! Tolerance in Newton scheme for Kutta condition correction
+kutta_maxiter           = 100                       ! Maximum number of iterations Newton scheme for Kutta condition correction
+kutta_startstep         = 1                         ! Time step to start correcting the Kutta condition
+kutta_update_jacobian   = 1                         ! Step frequency in which the jacobian matrix is updated in the Newton scheme for Kutta condition correction.

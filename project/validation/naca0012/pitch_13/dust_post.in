@@ -1,0 +1,62 @@
+!--- Data Names ---
+data_basename = ./Output/naca0012_wing
+basename = ./Postprocess/naca0012_wing
+
+!--- Model Parameters (as in solver) ---
+! far_field_ratio_doublet = 10.0      ! Ratio with respect to element length to set the thresholds for far field approximation.
+! far_field_ratio_source  = 10.0      ! Ratio with respect to element length to set the thresholds for far field approximation.
+! doublet_threshold       = 1.0e-6    ! Parameter which sets the distance threshold under which the evaluation point, with respect to a panel, is considered inside the plane of the panel.
+! rankine_rad             = 0.1       ! Parameter which sets the radius under which the Rankine approximation of vortexes cores is employed.
+! vortex_rad              = 0.1       ! Parameter which sets the radius of the vortex particles.
+! cutoff_rad              = 0.001     ! Parameter which sets the radius under which the vortexes interaction is completely set to zero.
+
+
+!--- Analysis ---
+
+analysis = {
+type        = viz           ! Type of the analysis. Options: viz for surface visualizations
+name        = vis01         ! Name of the analysis, will be appended as a suffix to basename
+start_res   = 1             ! First result in the time series of the solver results to analyze.
+end_res     = 30           ! Last result in the time series of the solver results to analyze.
+step_res    = 1             ! Stride to employ when loading the time series of the solver results.
+format      = vtk           ! Format of the processed results. Options: vtk or tecplot
+wake        = T             ! Output the wake in the postprocessing.
+separate_wake = T           ! Output the wake in separate files. It affects only the vtk output and only if wake is set to true.
+! average     = F             ! Average the results in the given time span, and output just one averaged result. When used in visualizations, wake must be False.
+variable    = vorticity
+variable    = vorticity_vector
+variable    = velocity
+variable    = surface_velocity
+variable    = pressure
+variable    = cp
+variable    = turbulent_viscosity
+variable    = vortex_rad
+! variable    = force  ! this produces an error
+! variable    = moment ! this produces an error
+}
+
+analysis = {
+type        = integral_loads    ! Type of the analysis, integral_loads for integral loads
+name        = load01            ! Name of the analysis, will be appended as a suffix to basename
+start_res   = 1                 ! First result in the time series of the solver results to analyze.
+end_res     = 30               ! Last result in the time series of the solver results to analyze.
+step_res    = 1                 ! Stride to employ when loading the time series of the solver results.
+format      = dat               ! Format of the processed results. Options: dat, tecplot
+average     = F                 ! average the results in the given time span.
+component   = all               ! Geometrical component to include in the loads computation.
+reference_tag = WingRef         ! The tag of the reference frame in which the loads should be referred to.
+}
+
+! analysis = {
+! type        = flow_field        ! Type of the analysis, flow_field for flow fields
+! name        = ff01              ! Name of the analysis, will be appended as a suffix to basename
+! start_res   = 1                 ! First result in the time series of the solver results to analyze.
+! end_res     = 30               ! Last result in the time series of the solver results to analyze.
+! step_res    = 1                 ! Stride to employ when loading the time series of the solver results.
+! format      = vtk               ! Format of the processed results. Options: vtk or tecplot
+! average     = F                 ! Average the results in the given time span, only one averaged result will be printed.
+! variable    = Velocity          ! Variable to output in the processed result. Options: Velocity, Pressure, cp
+! n_xyz       = (/ 10, 10, 1/)            ! Number of points in each direction of the sampling box.
+! min_xyz     = (/ -2.0, -2.0, 1.0 /)     ! Minimum of the coordinates of the box containing the structured sampling points.
+! max_xyz     = (/ 2.0, 2.0, 1.0 /)       ! Maximum of the coordinates of the box containing the structured sampling points.
+! }

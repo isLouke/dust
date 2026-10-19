@@ -1,0 +1,7 @@
+comp_name = wing
+geo_file = ./Geometry/wing.in
+ref_tag = WingRef
+
+!tol_se_wing = 0.001
+!inner_product_te = -0.5
+file_name = ./Geometry/geo_input.h5
