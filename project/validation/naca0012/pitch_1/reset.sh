@@ -3,6 +3,8 @@ echo
 echo "=== Deleting Output and Postprocess directories ==="
 echo
 
+echo "Removing geo_input.h5"
+rm -f ./Geometry/geo_input.h5
 echo "Removing Output"
 rm -rf ./Output/
 echo "Removing Postprocess"

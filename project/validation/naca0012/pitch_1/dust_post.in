@@ -17,7 +17,7 @@ analysis = {
 type        = viz           ! Type of the analysis. Options: viz for surface visualizations
 name        = vis01         ! Name of the analysis, will be appended as a suffix to basename
 start_res   = 1             ! First result in the time series of the solver results to analyze.
-end_res     = 50           ! Last result in the time series of the solver results to analyze.
+end_res     = 30           ! Last result in the time series of the solver results to analyze.
 step_res    = 1             ! Stride to employ when loading the time series of the solver results.
 format      = vtk           ! Format of the processed results. Options: vtk or tecplot
 wake        = T             ! Output the wake in the postprocessing.
@@ -39,7 +39,7 @@ analysis = {
 type        = integral_loads    ! Type of the analysis, integral_loads for integral loads
 name        = load01            ! Name of the analysis, will be appended as a suffix to basename
 start_res   = 1                 ! First result in the time series of the solver results to analyze.
-end_res     = 50               ! Last result in the time series of the solver results to analyze.
+end_res     = 30               ! Last result in the time series of the solver results to analyze.
 step_res    = 1                 ! Stride to employ when loading the time series of the solver results.
 format      = dat               ! Format of the processed results. Options: dat, tecplot
 average     = F                 ! average the results in the given time span.
@@ -47,16 +47,16 @@ component   = all               ! Geometrical component to include in the loads 
 reference_tag = WingRef         ! The tag of the reference frame in which the loads should be referred to.
 }
 
-analysis = {
-type        = flow_field        ! Type of the analysis, flow_field for flow fields
-name        = ff01              ! Name of the analysis, will be appended as a suffix to basename
-start_res   = 1                 ! First result in the time series of the solver results to analyze.
-end_res     = 50               ! Last result in the time series of the solver results to analyze.
-step_res    = 1                 ! Stride to employ when loading the time series of the solver results.
-format      = vtk               ! Format of the processed results. Options: vtk or tecplot
-average     = F                 ! Average the results in the given time span, only one averaged result will be printed.
-variable    = Velocity          ! Variable to output in the processed result. Options: Velocity, Pressure, cp
-n_xyz       = (/ 10, 10, 1/)            ! Number of points in each direction of the sampling box.
-min_xyz     = (/ -2.0, -2.0, 1.0 /)     ! Minimum of the coordinates of the box containing the structured sampling points.
-max_xyz     = (/ 2.0, 2.0, 1.0 /)       ! Maximum of the coordinates of the box containing the structured sampling points.
-}
+! analysis = {
+! type        = flow_field        ! Type of the analysis, flow_field for flow fields
+! name        = ff01              ! Name of the analysis, will be appended as a suffix to basename
+! start_res   = 1                 ! First result in the time series of the solver results to analyze.
+! end_res     = 30               ! Last result in the time series of the solver results to analyze.
+! step_res    = 1                 ! Stride to employ when loading the time series of the solver results.
+! format      = vtk               ! Format of the processed results. Options: vtk or tecplot
+! average     = F                 ! Average the results in the given time span, only one averaged result will be printed.
+! variable    = Velocity          ! Variable to output in the processed result. Options: Velocity, Pressure, cp
+! n_xyz       = (/ 10, 10, 1/)            ! Number of points in each direction of the sampling box.
+! min_xyz     = (/ -2.0, -2.0, 1.0 /)     ! Minimum of the coordinates of the box containing the structured sampling points.
+! max_xyz     = (/ 2.0, 2.0, 1.0 /)       ! Maximum of the coordinates of the box containing the structured sampling points.
+! }

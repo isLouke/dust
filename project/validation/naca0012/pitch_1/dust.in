@@ -5,9 +5,9 @@ debug_level     = 3                             ! A parameter controlling the ve
 
 ! --- Time Parameters ---
 tstart          = 0.0       ! The start time of the simulation.
-tend            = 5.0       ! The end time of the simulation.
+tend            = 3.0       ! The end time of the simulation.
 ! timesteps       = 20        ! The number of timesteps for the simulation. Required if dt not set, forbidden if set.
-dt              = 0.005      ! Required if timesteps not set, forbidden if set.
+dt              = 0.001      ! Required if timesteps not set, forbidden if set.
 dt_out          = 0.1       ! Time interval of solution output.
 dt_debug_out    = 1.0       ! Time interval of debug output.
 ! output_start    = F         ! Output the first iteration.
@@ -23,7 +23,7 @@ reference_file = References.in
 geometry_file = ./Geometry/geo_input.h5
 
 ! --- Stream Parameters ---
-u_inf   = (/14.69, 0.00, 0.26/)   ! Free stream velocity vector. Re = rho*U*c/mu = 1.0e6, matches airfoils/naca0012.c81
+u_inf   = (/24.100, 0.000, 0.421/)   ! Free stream velocity vector. Re = rho*U*c/mu => 1e06 = 1.225*U*0.6096/0.000018 => U = 24.10 m/s , matches airfoils/naca0012.c81
 ! u_ref   = 1.0                   ! Reference velocity.
 ! gust    = F                     ! Read manual for more settings.
 ! P_inf   = 101325.0              ! Free stream pressure.
@@ -45,7 +45,7 @@ rigid_wake_vel          = (/1.0, 0.0, 0.0/)         ! Velocity to impose to the 
 join_te                 = F                         ! Employ trailing edge joining for close trailing edges.
 join_te_factor          = 1.0                       ! Trailing edges which are closer than join_te_factor times the length of the adjacent trailing edge elements will be joined
 autoscale_te            = F                         ! Autoscale the first te panel.
-refine_wake             = T                         ! Allow splitting the wake panel into sub-particles.
+refine_wake             = F                         ! Allow splitting the wake panel into sub-particles.
 k_refine                = 1                         ! Number of subdivision of the shortest panel edge if refine_wake is T.
 
 ! --- Model Parameters ---
