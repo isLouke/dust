@@ -23,7 +23,7 @@ reference_file = References.in
 geometry_file = ./Geometry/geo_input.h5
 
 ! --- Stream Parameters ---
-u_inf   = (/24.089, 0.000, 0.841/)   ! Free stream velocity vector. Re = rho*U*c/mu => 1e06 = 1.225*U*0.6096/0.000018 => U = 24.10 m/s , matches airfoils/naca0012.c81
+u_inf   = (/25.78, 0.00, 0.90/)   ! Free stream velocity vector. Re = rho*U*c/mu => 1e06 = 1.225*U*0.6096/0.000018 => U = 24.10 m/s , matches airfoils/naca0012.c81
 ! u_ref   = 1.0                   ! Reference velocity.
 ! gust    = F                     ! Read manual for more settings.
 ! P_inf   = 101325.0              ! Free stream pressure.
