@@ -7,7 +7,7 @@ debug_level     = 3                             ! A parameter controlling the ve
 tstart          = 0.0       ! The start time of the simulation.
 tend            = 3.0       ! The end time of the simulation.
 ! timesteps       = 20        ! The number of timesteps for the simulation. Required if dt not set, forbidden if set.
-dt              = 0.001      ! Required if timesteps not set, forbidden if set.
+dt              = 0.01      ! Required if timesteps not set, forbidden if set.
 dt_out          = 0.1       ! Time interval of solution output.
 dt_debug_out    = 1.0       ! Time interval of debug output.
 ! output_start    = F         ! Output the first iteration.
@@ -15,7 +15,7 @@ dt_debug_out    = 1.0       ! Time interval of debug output.
 
 ! --- Restart Parameters ---
 ! restart_from_file   = T                     ! Restart the simulation from a previous result.
-! restart_file        = ./Output/naca0012_wing_res_0046.h5 ! Name of the solution file from which to restart the simulation.
+! restart_file        = ./Output/naca0012_wing_res_0015.h5 ! Name of the solution file from which to restart the simulation.
 ! reset_time          = F                     ! If set to true, when restarting from a previous result, the time will be set as the tstart from the input file.
 
 ! --- Input Files ---

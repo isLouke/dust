@@ -7,7 +7,7 @@ debug_level     = 3                             ! A parameter controlling the ve
 tstart          = 0.0       ! The start time of the simulation.
 tend            = 3.0       ! The end time of the simulation.
 ! timesteps       = 20        ! The number of timesteps for the simulation. Required if dt not set, forbidden if set.
-dt              = 0.001      ! Required if timesteps not set, forbidden if set.
+dt              = 0.05      ! Required if timesteps not set, forbidden if set.
 dt_out          = 0.1       ! Time interval of solution output.
 dt_debug_out    = 1.0       ! Time interval of debug output.
 ! output_start    = F         ! Output the first iteration.
@@ -23,7 +23,7 @@ reference_file = References.in
 geometry_file = ./Geometry/geo_input.h5
 
 ! --- Stream Parameters ---
-u_inf   = (/13.89, 0.00, 4.78/)   ! Free stream velocity vector. Re = rho*U*c/mu => 1e06 = 1.225*U*0.6096/0.000018 => U = 24.10 m/s , matches airfoils/naca0012.c81
+u_inf   = (/25.78, 0.00, -0.90/)   ! Free stream velocity vector. Re = rho*U*c/mu => 1e06 = 1.225*U*0.6096/0.000018 => U = 24.10 m/s , matches airfoils/naca0012.c81
 ! u_ref   = 1.0                   ! Reference velocity.
 ! gust    = F                     ! Read manual for more settings.
 ! P_inf   = 101325.0              ! Free stream pressure.
@@ -107,7 +107,7 @@ leaves_time_ratio       = 3.0                       ! Ratio between the time spe
 vl_tol                  = 1.0e-4                    ! Tolerance for the absolute error on lift coefficient in fixed point iteration for corrected vortex lattice.
 vl_relax                = 0.3                       ! Constant relaxation factor for rhs update.
 aitken_relaxation       = T                         ! Activate the Aitken acceleration and stabilization method involved during the vortex lattice fixed point iteration.
-vl_maxiter              = 100                       ! Max number of iteration for correction of vortex lattice
+vl_maxiter              = 500                       ! Max number of iteration for correction of vortex lattice
 vl_start_step           = 0                         ! Time step to start correcting the vortex lattice element
 vl_dynstall             = F                         ! Activate Boeing1 dynamic stall on the corrected v element. EXPERIMENTAL
 vl_average              = F                         ! Average the solution between the iteration: this may further stabilize the solution in stalled conditions
